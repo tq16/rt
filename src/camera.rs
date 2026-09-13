@@ -30,10 +30,7 @@ impl Camera {
         let horizontal = right * viewport_width;
         let vertical = up * viewport_height;
 
-        let lower_left_corner =
-            viewport_center
-            - horizontal / 2.0
-            - vertical / 2.0;
+        let lower_left_corner = viewport_center - horizontal / 2.0 - vertical / 2.0;
 
         Self {
             origin: look_from,
@@ -45,10 +42,7 @@ impl Camera {
 
     pub fn get_ray(&self, u: f64, v: f64) -> Ray {
         let direction =
-            self.lower_left_corner
-            + self.horizontal * u
-            + self.vertical * v
-            - self.origin;
+            self.lower_left_corner + self.horizontal * u + self.vertical * v - self.origin;
 
         Ray::new(self.origin, direction)
     }

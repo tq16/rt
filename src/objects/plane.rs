@@ -27,8 +27,7 @@ impl Hittable for Plane {
             return None;
         }
 
-        let distance =
-            (self.point - ray.origin).dot(self.normal) / ray_facing_plane;
+        let distance = (self.point - ray.origin).dot(self.normal) / ray_facing_plane;
 
         if distance < min_distance || distance > max_distance {
             return None;

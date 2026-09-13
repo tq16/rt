@@ -63,17 +63,11 @@ impl Hittable for Cylinder {
 
         let origin_to_center = ray.origin - self.center;
 
-        let a =
-            ray.direction.x * ray.direction.x
-            + ray.direction.z * ray.direction.z;
+        let a = ray.direction.x * ray.direction.x + ray.direction.z * ray.direction.z;
 
-        let half_b =
-            origin_to_center.x * ray.direction.x
-            + origin_to_center.z * ray.direction.z;
+        let half_b = origin_to_center.x * ray.direction.x + origin_to_center.z * ray.direction.z;
 
-        let c =
-            origin_to_center.x * origin_to_center.x
-            + origin_to_center.z * origin_to_center.z
+        let c = origin_to_center.x * origin_to_center.x + origin_to_center.z * origin_to_center.z
             - self.radius * self.radius;
 
         let mut closest_hit: Option<HitRecord> = None;
@@ -85,10 +79,7 @@ impl Hittable for Cylinder {
             if discriminant >= 0.0 {
                 let square_root = discriminant.sqrt();
 
-                for distance in [
-                    (-half_b - square_root) / a,
-                    (-half_b + square_root) / a,
-                ] {
+                for distance in [(-half_b - square_root) / a, (-half_b + square_root) / a] {
                     if distance < min_distance || distance > closest_distance {
                         continue;
                     }
@@ -99,12 +90,8 @@ impl Hittable for Cylinder {
                         continue;
                     }
 
-                    let normal = Vec3::new(
-                        point.x - self.center.x,
-                        0.0,
-                        point.z - self.center.z,
-                    )
-                    .normalize();
+                    let normal = Vec3::new(point.x - self.center.x, 0.0, point.z - self.center.z)
+                        .normalize();
 
                     closest_distance = distance;
                     closest_hit = Some(HitRecord {

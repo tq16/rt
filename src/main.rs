@@ -28,14 +28,9 @@ fn ray_color(ray: Ray, scene: &Scene, light: &PointLight) -> Vec3 {
         let light_distance = to_light.length();
         let light_direction = to_light.normalize();
 
-        let shadow_ray = Ray::new(
-            hit.point + hit.normal * 0.001,
-            light_direction,
-        );
+        let shadow_ray = Ray::new(hit.point + hit.normal * 0.001, light_direction);
 
-        let is_in_shadow = scene
-            .hit(shadow_ray, 0.001, light_distance)
-            .is_some();
+        let is_in_shadow = scene.hit(shadow_ray, 0.001, light_distance).is_some();
 
         let ambient_light = hit.material.ambient;
 
@@ -44,9 +39,7 @@ fn ray_color(ray: Ray, scene: &Scene, light: &PointLight) -> Vec3 {
         } else {
             let light_facing_surface = hit.normal.dot(light_direction).max(0.0);
 
-            hit.material.diffuse
-                * light.intensity
-                * light_facing_surface
+            hit.material.diffuse * light.intensity * light_facing_surface
         };
 
         return hit.material.color * (ambient_light + diffuse_light);
@@ -71,11 +64,7 @@ fn make_scene(scene_name: &str, aspect_ratio: f64) -> Option<(Scene, Camera, Poi
 
     match scene_name {
         "sphere" => {
-            scene.add(Box::new(Sphere::new(
-                Vec3::new(0.0, 0.0, -2.0),
-                0.5,
-                red,
-            )));
+            scene.add(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -2.0), 0.5, red)));
 
             let camera = Camera::new(
                 Vec3::new(0.0, 0.0, 0.0),
@@ -85,20 +74,13 @@ fn make_scene(scene_name: &str, aspect_ratio: f64) -> Option<(Scene, Camera, Poi
                 45.0,
             );
 
-            let light = PointLight::new(
-                Vec3::new(-2.0, 2.5, 0.0),
-                1.0,
-            );
+            let light = PointLight::new(Vec3::new(-2.0, 2.5, 0.0), 1.0);
 
             Some((scene, camera, light))
         }
 
         "plane-cube" => {
-            scene.add(Box::new(Cube::new(
-                Vec3::new(0.0, -0.10, -1.5),
-                0.80,
-                blue,
-            )));
+            scene.add(Box::new(Cube::new(Vec3::new(0.0, -0.10, -1.5), 0.80, blue)));
 
             scene.add(Box::new(Plane::new(
                 Vec3::new(0.0, -0.5, 0.0),
@@ -114,20 +96,13 @@ fn make_scene(scene_name: &str, aspect_ratio: f64) -> Option<(Scene, Camera, Poi
                 45.0,
             );
 
-            let light = PointLight::new(
-                Vec3::new(-2.0, 2.5, 0.0),
-                0.45,
-            );
+            let light = PointLight::new(Vec3::new(-2.0, 2.5, 0.0), 0.45);
 
             Some((scene, camera, light))
         }
 
         "all" | "all-alt" => {
-            scene.add(Box::new(Sphere::new(
-                Vec3::new(0.25, 0.0, -1.25),
-                0.5,
-                red,
-            )));
+            scene.add(Box::new(Sphere::new(Vec3::new(0.25, 0.0, -1.25), 0.5, red)));
 
             scene.add(Box::new(Cylinder::new(
                 Vec3::new(-0.85, -0.05, -1.45),
@@ -166,10 +141,7 @@ fn make_scene(scene_name: &str, aspect_ratio: f64) -> Option<(Scene, Camera, Poi
                 )
             };
 
-            let light = PointLight::new(
-                Vec3::new(-2.0, 2.5, 0.0),
-                1.0,
-            );
+            let light = PointLight::new(Vec3::new(-2.0, 2.5, 0.0), 1.0);
 
             Some((scene, camera, light))
         }
@@ -194,10 +166,7 @@ fn read_dimension(arguments: &[String], flag: &str, default_value: i32) -> i32 {
 fn main() {
     let arguments: Vec<String> = env::args().collect();
 
-    let scene_name = arguments
-        .get(1)
-        .map(String::as_str)
-        .unwrap_or("all");
+    let scene_name = arguments.get(1).map(String::as_str).unwrap_or("all");
 
     let image_width = read_dimension(&arguments, "--width", 400);
     let image_height = read_dimension(&arguments, "--height", 225);
